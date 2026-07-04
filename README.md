@@ -1,20 +1,40 @@
-# 2048 Game (C# Implementation)
+# 🎮 2048 Game (C# Implementation)
 
-A desktop implementation of the popular 2048 puzzle game. This project demonstrates logic for managing 2D arrays, tile merging algorithms, and handling user input in C#.
+A C# implementation of the classic 2048 puzzle game built with a strong focus on clean architecture, Object-Oriented Programming, and efficient game logic. The project demonstrates matrix manipulation, state management, and responsive user interaction.
 
-## ✨ Key Features
-- **Matrix Logic:** Optimized 4x4 grid management for tile movements and merges.
-- **Dynamic Scoring:** Real-time score calculation as tiles combine.
-- **Game State Detection:** Automatically detects "Game Over" when no moves are left or when the player reaches the 2048 tile.
-- **Clean UI:** Responsive design and clear visual feedback for the player.
+## ✨ Features
 
-## 🛠 Technical Details
-- **Language:** C#
-- **Platform:** .NET / Visual Studio
-- **Core Concepts:** 2D Arrays (Matrices), Input Handling, Game Loop Logic.
+- **Efficient Matrix Manipulation** – Implements optimized 2D array algorithms for tile movement and merging.
+- **Game State Management** – Handles score calculation, board updates, victory detection, and game-over conditions.
+- **Object-Oriented Design** – Organized into reusable classes with clear separation of responsibilities.
+- **Responsive Controls** – Processes keyboard input to provide smooth and intuitive gameplay.
+- **Clean & Maintainable Code** – Written with readability, extensibility, and long-term maintainability in mind.
 
-## 🚀 How to Play
+## 🧠 Concepts Demonstrated
+
+The project showcases practical experience with:
+
+- 2D array (matrix) manipulation.
+- Tile movement and merge algorithms.
+- Game state management and scoring logic.
+- User input handling.
+- Object-Oriented Programming (OOP).
+- Clean code principles.
+
+## 🛠 Technologies
+
+- C#
+- Object-Oriented Programming (OOP)
+- 2D Arrays (Matrix Algorithms)
+- Visual Studio
+
+## 🚀 Getting Started
+
 1. Clone the repository.
-2. Open the solution file (.sln) in Visual Studio.
-3. Build and Run the project.
-4. Use Arrow Keys or WASD to move the tiles.
+2. Open the solution (`.sln`) file in Visual Studio.
+3. Build and run the project.
+4. Use the **W**, **A**, **S**, and **D** keys to move the tiles.
+
+## 📌 Purpose
+
+This project was developed to strengthen Object-Oriented Programming skills, algorithmic thinking, and matrix-based game logic by implementing a complete desktop version of the 2048 puzzle game.
