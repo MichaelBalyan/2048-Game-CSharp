@@ -1,50 +1,56 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Game2048
 {
     class Game
     {
-        public bool IsPlayable(int[,] board)
-        {
-            bool canPlay = false;
+        private List<int> rowValues = new List<int>();
+        private bool win = false;
+        private bool canPlay = true;
 
-            for(int i = 0; i < 4; i++)
+        private int[,] board = new int[4, 4];
+
+        public bool IsThereFreeField()
+        {
+            for (int i = 0; i < 4; i++)
             {
-                for(int j = 0; j < 4; j++)
+                for (int j = 0; j < 4; j++)
                 {
                     if (board[i, j] == 0)
                     {
-                        canPlay = true;
-                        break;
+                        return true;
                     }
-                }
-                if(canPlay == true)
-                {
-                    break;
                 }
             }
 
-            for (int i = 0; i < 4; i++)
+            return false;
+        }
+        public bool IsPlayable()
+        {
+            canPlay = IsThereFreeField();
+
+            if (!canPlay)
             {
-                for (int j = 0; j < 3; j++)
+
+                for (int i = 0; i < 4; i++)
                 {
-                    if (board[i, j] == board[i, j + 1])
+                    for (int j = 0; j < 3; j++)
                     {
-                        canPlay = true;
+                        if (board[i, j] == board[i, j + 1])
+                        {
+                            canPlay = true;
+                            break;
+                        }
+                    }
+                    if (canPlay == true)
+                    {
                         break;
                     }
                 }
-                if (canPlay == true)
-                {
-                    break;
-                }
             }
 
-            if (canPlay == false)
+            if (!canPlay)
             {
                 for (int j = 0; j < 4; j++)
                 {
@@ -66,26 +72,16 @@ namespace Game2048
             return canPlay;
         }
 
-        public int[,] AddRandomNumber(int[,] board)
+        public void AddRandomNumber()
         {
-            bool canAdd = false;
-            for (int i = 0; i < 4; i++)
-            {
-                for (int j = 0; j < 4; j++)
-                {
-                    if (board[i, j] == 0)
-                    {
-                        canAdd = true;
-                    }
-                }
-            }
+            bool canAdd = canPlay;
 
-            if (canAdd == true)
+            if (canAdd)
             {
                 Random rnd = new Random();
-                int probabillity = rnd.Next(1, 4);
+                int probability = rnd.Next(1, 6);
                 int num = 4;
-                if (probabillity < 3)
+                if (probability < 3)
                 {
                     num = 2;
                 }
@@ -101,12 +97,9 @@ namespace Game2048
 
                 board[index_i, index_j] = num;
             }
-            
-
-            return board;
         }
 
-        public int[,] Fill(int[,] board)
+        public void Fill()
         {
             for(int i = 0; i < 4; i++)
             {
@@ -116,15 +109,14 @@ namespace Game2048
                 }
             }
 
-            board = AddRandomNumber(board);
-            board = AddRandomNumber(board);
-
-            return board;
+            for (int i = 0; i < 2; i++)
+            {
+                AddRandomNumber();
+            }
         } 
 
-        public bool IsWinning(int[,] board)
+        public bool IsWinning()
         {
-            bool win = false; 
             for(int i = 0; i < 4; i++)
             {
                 for(int j = 0; j < 4; j++)
@@ -139,7 +131,7 @@ namespace Game2048
             return win;
         }
 
-        public void Print(int[,] board)
+        public void PrintBoard()
         {
             for(int i = 0; i < 4; i++)
             {
@@ -199,182 +191,151 @@ namespace Game2048
             }
         }
 
-        public int[,] MoveUp(int[,] board)
+        public void MoveUp()
         {
-            List<int> list = new List<int>();
-
             for(int j = 0; j < 4; j++)
             { 
                 for(int i = 0; i < 4; i++)
                 {
                     if (board[i, j] != 0)
                     {
-                        list.Add(board[i, j]);
+                        rowValues.Add(board[i, j]);
                     }
                 }
                 
-                for(int i = 0; i < list.Count - 1; i++)
+                for(int i = 0; i < rowValues.Count - 1; i++)
                 {
-                    if (list[i] == list[i + 1])
+                    if (rowValues[i] == rowValues[i + 1])
                     {
-                        list[i] *= 2;
-                        list.RemoveAt(i + 1);
+                        rowValues[i] *= 2;
+                        rowValues.RemoveAt(i + 1);
                     }
                 }
 
-                while(list.Count < 4)
+                while(rowValues.Count < 4)
                 {
-                    list.Add(0);
+                    rowValues.Add(0);
                 }
 
                 for(int i = 0; i < 4; i++)
                 {
-                    board[i, j] = list[i];
+                    board[i, j] = rowValues[i];
                 }
 
-                list.Clear();
+                rowValues.Clear();
             }
-
-            board = AddRandomNumber(board);
-
-            return board;
         }
 
-        public int[,] MoveDown(int[,] board)
+        public void MoveDown()
         {
-            List<int> list = new List<int>();
-
             for (int j = 0; j < 4; j++)
             {
                 for (int i = 0; i < 4; i++)
                 {
                     if (board[i, j] != 0)
                     {
-                        list.Add(board[i, j]);
+                        rowValues.Add(board[i, j]);
                     }
                 }
 
-                for (int i = list.Count - 1; i >= 1; i--)
+                for (int i = rowValues.Count - 1; i >= 1; i--)
                 {
-                    if (list[i] == list[i - 1])
+                    if (rowValues[i] == rowValues[i - 1])
                     {
-                        list[i] *= 2;
-                        list.RemoveAt(i - 1);
+                        rowValues[i] *= 2;
+                        rowValues.RemoveAt(i - 1);
                         i--;
                     }
                 }
 
-                while (list.Count < 4)
+                while (rowValues.Count < 4)
                 {
-                    list.Insert(0, 0);
+                    rowValues.Insert(0, 0);
                 }
 
                 for (int i = 0; i < 4; i++)
                 {
-                    board[i, j] = list[i];
+                    board[i, j] = rowValues[i];
                 }
 
-                list.Clear();
+                rowValues.Clear();
             }
-
-            board = AddRandomNumber(board);
-
-            return board;
         }
 
-        public int[,] MoveLeft(int[,] board)
+        public void MoveLeft()
         {
-            List<int> list = new List<int>();
-
             for(int i = 0; i < 4; i++)
             {
                 for(int j = 0; j < 4; j++)
                 {
                     if (board[i, j] != 0)
                     {
-                        list.Add(board[i, j]);
+                        rowValues.Add(board[i, j]);
                     }
                 }
 
-                for (int j = 0; j < list.Count - 1; j++)
+                for (int j = 0; j < rowValues.Count - 1; j++)
                 {
-                    if (list[j] == list[j + 1])
+                    if (rowValues[j] == rowValues[j + 1])
                     {
-                        list[j] *= 2;
-                        list.RemoveAt(j + 1);
+                        rowValues[j] *= 2;
+                        rowValues.RemoveAt(j + 1);
                     }
                 }
 
-                while (list.Count < 4)
+                while (rowValues.Count < 4)
                 {
-                    list.Add(0);
+                    rowValues.Add(0);
                 }
 
                 for (int j = 0; j < 4; j++)
                 {
-                    board[i, j] = list[j];
+                    board[i, j] = rowValues[j];
                 }
 
-                list.Clear();
+                rowValues.Clear();
             }
-
-            board = AddRandomNumber(board);
-
-            return board;
         }
 
-        public int[,] MoveRight(int[,] board)
+        public void MoveRight()
         {
-            List<int> list = new List<int>();
-
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
                     if (board[i, j] != 0)
                     {
-                        list.Add(board[i, j]);
+                        rowValues.Add(board[i, j]);
                     }
                 }
 
-                for (int j = list.Count - 1; j >= 1; j--)
+                for (int j = rowValues.Count - 1; j >= 1; j--)
                 {
-                    if (list[j] == list[j - 1])
+                    if (rowValues[j] == rowValues[j - 1])
                     {
-                        list[j] *= 2;
-                        list.RemoveAt(j - 1);
+                        rowValues[j] *= 2;
+                        rowValues.RemoveAt(j - 1);
                         j--;
                     }
                 }
 
-                while (list.Count < 4)
+                while (rowValues.Count < 4)
                 {
-                    list.Insert(0, 0);
+                    rowValues.Insert(0, 0);
                 }
 
                 for (int j = 0; j < 4; j++)
                 {
-                    board[i, j] = list[j];
+                    board[i, j] = rowValues[j];
                 }
 
-                list.Clear();
+                rowValues.Clear();
             }
-
-            board = AddRandomNumber(board);
-
-            return board;
         }
-    }
-    internal class Program
-    {
-        static void Main(string[] args)
-        {
-            int[,] board = new int[4, 4];
-            bool win = false;
-            bool canPlay = true;
 
-            Game game = new Game();
-            board = game.Fill(board);
+        public void StartGame()
+        {
+            Fill();
 
             while (canPlay == true && win == false)
             {
@@ -391,15 +352,15 @@ namespace Game2048
                     Console.ResetColor();
                     Console.WriteLine();
                     Console.WriteLine();
-                    game.Print(board);
+                    PrintBoard();
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.Write("> ");
                     Console.ForegroundColor = ConsoleColor.Cyan;
-                    char input = char.Parse(Console.ReadLine());
+                    char input = char.Parse(Console.ReadLine().ToLower());
                     Console.ResetColor();
                     Console.WriteLine();
 
-                    if (input == 'p') 
+                    if (input == 'p')
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("You have breaked the game!");
@@ -410,46 +371,63 @@ namespace Game2048
                     switch (input)
                     {
                         case 'w':
-                            board = game.MoveUp(board);
-                            win = game.IsWinning(board);
-                            canPlay = game.IsPlayable(board);
+                            MoveUp();
                             break;
                         case 's':
-                            board = game.MoveDown(board);
-                            win = game.IsWinning(board);
-                            canPlay = game.IsPlayable(board);
+                            MoveDown();
                             break;
                         case 'a':
-                            board = game.MoveLeft(board);
-                            win = game.IsWinning(board);
-                            canPlay = game.IsPlayable(board);
+                            MoveLeft();
                             break;
                         case 'd':
-                            board = game.MoveRight(board);
-                            win = game.IsWinning(board);
-                            canPlay = game.IsPlayable(board);
+                            MoveRight();
                             break;
                     }
 
-                   
+                    if (IsThereFreeField())
+                    {
+                        AddRandomNumber();
+                    }
+
+                    win = IsWinning();
+                    canPlay = IsPlayable();
                 }
-                catch (Exception) { }
+                catch (Exception ex) {
+                    Console.WriteLine(ex.Message);
+                }
             }
-            if(win == true)
+        }
+
+        public void CheckWin()
+        {
+            if (win)
             {
-                game.Print(board);
+                PrintBoard();
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Great! You have WON this game!!!");
                 Console.ResetColor();
             }
-            if(canPlay == false)
+            if (!canPlay)
             {
-                game.Print(board);
+                PrintBoard();
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Oops! You have lose the game...");
                 Console.ResetColor();
             }
-            
+        }
+
+        public void Play()
+        {
+            StartGame();
+            CheckWin();
+        }
+    }
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Game game = new Game();
+            game.Play();
         }
     }
 }
